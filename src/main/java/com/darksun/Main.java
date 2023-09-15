@@ -2,6 +2,8 @@ package com.darksun;
 
 import com.darksun.controller.ai.CustomerSupportAgent;
 import com.darksun.controller.ai.tools.OrderCardTools;
+import com.darksun.controller.ai.tools.OrderItemTools;
+import com.darksun.controller.ai.tools.ProductTools;
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.DocumentSplitter;
 import dev.langchain4j.data.document.splitter.DocumentSplitters;
@@ -38,11 +40,13 @@ public class Main implements CommandLineRunner {
 	@Bean
 	CustomerSupportAgent customerSupportAgent( ChatLanguageModel chatLanguageModel,
 											   OrderCardTools orderCardTools,
+											   ProductTools productTools,
+											   OrderItemTools orderItemTools,
 											   Retriever< TextSegment > retriever ) {
 		return AiServices.builder( CustomerSupportAgent.class )
 						 .chatLanguageModel( chatLanguageModel )
 						 .chatMemory( MessageWindowChatMemory.withMaxMessages( 20 ) )
-						 .tools( orderCardTools )
+						 .tools( orderCardTools, productTools, orderItemTools )
 						 .retriever( retriever )
 						 .build( );
 	}
